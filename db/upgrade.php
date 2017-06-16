@@ -289,6 +289,13 @@ function xmldb_block_panopto_upgrade($oldversion = 0) {
         $versionerrorstring = get_string('upgrade_panopto_required_version', 'block_panopto');
         $usercanupgrade = true;
 
+        if (CLI_SCRIPT) {
+            // log in as admin - we need doanything permission
+            // get_admin returns the first active siteadmin user.
+            // This user *also* needs to be an administrator in Panopto.
+            \core\session\manager::set_user(get_admin());
+        }
+
         foreach ($oldpanoptocourses as $oldcourse) {
             ++$currindex;
             update_upgrade_progress($currindex, $totalupgradesteps);
